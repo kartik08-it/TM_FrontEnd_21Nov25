@@ -3,3 +3,9 @@ body {
   background: #f6f8fb;
   font-family: "Inter", sans-serif;
 }
+
+/* ensure dropdowns appear above content */
+.MuiPaper-root[ref] {
+  z-index: 4000;
+}
+

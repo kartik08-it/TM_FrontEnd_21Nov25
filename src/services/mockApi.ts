@@ -53,6 +53,28 @@ export const mockDeleteProject = async (id: string) => {
   return true;
 };
 
+// append to src/services/mockApi.ts (or add if missing)
+export const mockGetCurrentUser = async () => {
+  const auth = JSON.parse(localStorage.getItem("tm_auth_v1") || "null");
+  if (!auth?.user) return null;
+  const users = JSON.parse(localStorage.getItem("tm_users_v1") || "[]");
+  return users.find((u: any) => u.id === auth.user.id) || auth.user;
+};
+
+export const mockUpdateUser = async (id: string, payload: any) => {
+  const users = JSON.parse(localStorage.getItem("tm_users_v1") || "[]");
+  const next = users.map((u: any) => (u.id === id ? { ...u, ...payload } : u));
+  localStorage.setItem("tm_users_v1", JSON.stringify(next));
+  // if current auth user updated, sync auth storage
+  const auth = JSON.parse(localStorage.getItem("tm_auth_v1") || "null");
+  if (auth?.user?.id === id) {
+    auth.user = { ...auth.user, ...payload };
+    localStorage.setItem("tm_auth_v1", JSON.stringify(auth));
+  }
+  return next.find((u: any) => u.id === id);
+};
+
+
 /* Tasks */
 export const mockGetTasks = async (projectId?: string) => {
   const tasks = read(LS_KEYS.TASKS);
@@ -103,4 +125,6 @@ export const mockAuthenticate = async (email: string, password: string) => {
     refresh_token: "mock_refresh_" + u.id,
     user: { id: u.id, name: u.name, email: u.email },
   };
+
+  
 };

@@ -8,6 +8,7 @@ import { getAuthState } from "../context/AuthStore";
 import AppShell from "../component/layout/AppShell";
 import Register from "../pages/auth/Register";
 import type { JSX } from "react";
+import ProfilePage from "../pages/profile/Profile";
 
 const Protected = ({ children }: { children: JSX.Element }) => {
   const auth = getAuthState();
@@ -34,6 +35,7 @@ export default function AppRouter() {
           <Route path="projects" element={<ProjectList />} />
           <Route path="projects/:id" element={<ProjectDetails />} />
           <Route path="tasks" element={<TaskBoard />} />
+          <Route path="profile" element={<ProfilePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
