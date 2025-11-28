@@ -1,17 +1,27 @@
-// src/components/layout/Sidebar.tsx
-
-import { Box, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
-
-// icons (optional but recommended)
+import {
+  Box,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Drawer,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FolderIcon from "@mui/icons-material/Folder";
 import TaskIcon from "@mui/icons-material/Task";
+import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import { useState } from "react";
 
 export default function Sidebar() {
   const theme = useTheme();
   const location = useLocation();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [open, setOpen] = useState(false);
 
   const menu = [
     { label: "Dashboard", to: "/", icon: <DashboardIcon /> },
@@ -19,16 +29,18 @@ export default function Sidebar() {
     { label: "Tasks", to: "/tasks", icon: <TaskIcon /> },
   ];
 
-  return (
+  const SidebarContent = (
     <Box
       sx={{
-        width: 220,
+        width: 240,
         height: "100vh",
+        overflowY: "auto",
         borderRight: 1,
         borderColor: theme.palette.divider,
-        background: theme.palette.mode === "dark"
-          ? theme.palette.background.paper
-          : "#f5f8ff",
+        background:
+          theme.palette.mode === "dark"
+            ? theme.palette.background.paper
+            : "#f5f8ff",
         p: 2,
       }}
     >
@@ -41,6 +53,7 @@ export default function Sidebar() {
               key={item.to}
               component={Link}
               to={item.to}
+              onClick={() => isMobile && setOpen(false)} // close drawer on mobile
               sx={{
                 borderRadius: 1,
                 mb: 1,
@@ -82,5 +95,55 @@ export default function Sidebar() {
         })}
       </List>
     </Box>
+  );
+
+  return (
+    <>
+      {/* Mobile Hamburger Button */}
+      {isMobile && (
+        <IconButton
+          onClick={() => setOpen(true)}
+          sx={{
+            position: "fixed",
+            top: 16,
+            left: 16,
+            zIndex: 2000,
+            bgcolor: "white",
+            boxShadow: 2,
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      {/* Desktop Sticky Sidebar */}
+      {!isMobile && (
+        <Box
+          sx={{
+            width: 240,
+            height: "100vh",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            overflowY: "auto",
+            borderRight: 1,
+            borderColor: theme.palette.divider,
+            background:
+              theme.palette.mode === "dark"
+                ? theme.palette.background.paper
+                : "#f5f8ff",
+            p: 2,
+            zIndex: 1200,
+          }}
+        >
+          {SidebarContent}
+        </Box>
+      )}
+
+      {/* Mobile Drawer */}
+      <Drawer open={open} onClose={() => setOpen(false)}>
+        {SidebarContent}
+      </Drawer>
+    </>
   );
 }
