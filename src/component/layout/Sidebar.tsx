@@ -12,6 +12,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FolderIcon from "@mui/icons-material/Folder";
 import TaskIcon from "@mui/icons-material/Task";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import GroupIcon from "@mui/icons-material/Group";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import MapIcon from "@mui/icons-material/Map";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -19,14 +23,20 @@ import { useState } from "react";
 export default function Sidebar() {
   const theme = useTheme();
   const location = useLocation();
-
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(false);
 
+  // ⬇️ Updated menu items
   const menu = [
     { label: "Dashboard", to: "/", icon: <DashboardIcon /> },
     { label: "Projects", to: "/projects", icon: <FolderIcon /> },
     { label: "Tasks", to: "/tasks", icon: <TaskIcon /> },
+
+    // NEW MODULES:
+    { label: "Sprint Board", to: "/sprints", icon: <TimelineIcon /> },
+    { label: "Team", to: "/team", icon: <GroupIcon /> },
+    { label: "Reports", to: "/reports", icon: <AssessmentIcon /> },
+    { label: "Roadmap", to: "/roadmap", icon: <MapIcon /> },
   ];
 
   const SidebarContent = (
@@ -35,13 +45,13 @@ export default function Sidebar() {
         width: 240,
         height: "100vh",
         overflowY: "auto",
+        p: 2,
         borderRight: 1,
         borderColor: theme.palette.divider,
         background:
           theme.palette.mode === "dark"
             ? theme.palette.background.paper
             : "#f5f8ff",
-        p: 2,
       }}
     >
       <List>
@@ -53,14 +63,14 @@ export default function Sidebar() {
               key={item.to}
               component={Link}
               to={item.to}
-              onClick={() => isMobile && setOpen(false)} // close drawer on mobile
+              onClick={() => isMobile && setOpen(false)}
               sx={{
                 borderRadius: 1,
                 mb: 1,
                 background: active
                   ? theme.palette.mode === "dark"
                     ? "rgba(255,255,255,0.08)"
-                    : "rgba(25, 118, 210, 0.15)"
+                    : "rgba(25,118,210,0.15)"
                   : "transparent",
                 color: active
                   ? theme.palette.primary.main
@@ -69,7 +79,7 @@ export default function Sidebar() {
                   background:
                     theme.palette.mode === "dark"
                       ? "rgba(255,255,255,0.05)"
-                      : "rgba(25, 118, 210, 0.10)",
+                      : "rgba(25,118,210,0.10)",
                 },
               }}
             >
@@ -99,7 +109,6 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Hamburger Button */}
       {isMobile && (
         <IconButton
           onClick={() => setOpen(true)}
@@ -116,7 +125,6 @@ export default function Sidebar() {
         </IconButton>
       )}
 
-      {/* Desktop Sticky Sidebar */}
       {!isMobile && (
         <Box
           sx={{
@@ -140,7 +148,6 @@ export default function Sidebar() {
         </Box>
       )}
 
-      {/* Mobile Drawer */}
       <Drawer open={open} onClose={() => setOpen(false)}>
         {SidebarContent}
       </Drawer>

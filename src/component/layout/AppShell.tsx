@@ -5,42 +5,33 @@ import Sidebar from "./Sidebar";
 
 export default function AppShell() {
   return (
-    <Box sx={{ display: "flex" }}>
-      <Sidebar />
+    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
 
-      <Box
-        sx={{
-          flexGrow: 1,
-          ml: { md: "240px", xs: 0 }, 
-        }}
-      >
-        {/* Fixed Navbar */}
-        <Box
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: { md: "240px", xs: 0 },
-            right: 0,
-            height: 64,
-            zIndex: 2000,
-            bgcolor: "background.paper",
-            borderBottom: "1px solid",
-            borderColor: "divider",
-          }}
-        >
+      {/* FIXED SIDEBAR */}
+      <Box sx={{ width: 220, flexShrink: 0 }}>
+        <Sidebar />
+      </Box>
+
+      {/* MAIN AREA */}
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+
+        {/* FIXED NAVBAR */}
+        <Box sx={{ position: "sticky", top: 0, zIndex: 1000 }}>
           <Navbar />
         </Box>
 
+        {/* SCROLLABLE CONTENT AREA (FULL WIDTH!) */}
         <Box
           sx={{
-            mt: "64px",
-            height: "calc(100vh - 64px)",
+            flexGrow: 1,
             overflowY: "auto",
-            p: { xs: 2, md: 3 },
+            p: 3,
+            maxWidth: "100%",
           }}
         >
           <Outlet />
         </Box>
+
       </Box>
     </Box>
   );
